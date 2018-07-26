@@ -11,7 +11,7 @@ set(BIN_INC_DIR "${PROJECT_BINARY_DIR}/src")
 
 
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp src/PoolList.h)
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
 
 

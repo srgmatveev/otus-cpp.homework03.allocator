@@ -201,6 +201,16 @@ namespace hw03 {
         }
 
 
+        void pop_back() {
+            auto last = this->before_begin();
+            auto tmp =last;
+            while (std::next(last) != this->end()) {
+                tmp=last;
+                ++last;
+
+            }
+            _M_erase_after(static_cast<_Fwd_list_node_base *>(tmp._M_node),0);
+        }
 
 
         void

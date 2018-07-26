@@ -1,6 +1,10 @@
 
 #pragma once
-//#define DEBUG 1
+
+
+#include "PoolList.h"
+#include <stdexcept>
+
 
 template<typename T, size_t init_pool_size>
 struct custom_allocator {
@@ -15,14 +19,15 @@ struct custom_allocator {
     using difference_type= ptrdiff_t;
     using size_type= size_t;
 
-    void* pool{nullptr};
+    void *pool{nullptr};
+    size_t pool_size{0};
     size_t members_count{0};
-
-
+    size_t add_members_count{0};
+    PoolList<T>* pool_list{nullptr};
 
     template<typename U>
     struct rebind {
-        using other = custom_allocator<U,init_pool_size>;
+        using other = custom_allocator<U, init_pool_size>;
     };
 
     custom_allocator() = default;
@@ -36,24 +41,33 @@ struct custom_allocator {
 
     T *allocate(std::size_t n) {
 
-#ifdef DEBUG
-        std::cout << "allocate: [n = " << n << "]" << std::endl;
-#endif
-        auto before_members_increment = members_count;
+if(n>1) std::invalid_argument("Sorry, but we could allocate only one element for time");
 
-        for(auto i=0; i<n; ++i) {++members_count;}
 
-        if(!pool) {
 
-            pool = std::malloc(sizeof(T) * init_pool_size);
-            if (!pool)
-                throw std::bad_alloc();
+
+
+
+
+            ++members_count;
+
+
+
+
+        if(!pool_list){ pool_list = new PoolList<T>(init_pool_size);
+
         }
-#ifdef DEBUG
-        std::cout<<"members_count ="<<members_count<<std::endl;
-#endif
 
-        auto p = reinterpret_cast<T *>(pool) + before_members_increment;
+        pool_list->add_allocate_node_pointer_to_list(add_members_count);
+
+
+
+
+
+
+        auto p = reinterpret_cast<T *>(pool_list->get_element_pointer(add_members_count));
+                ++add_members_count;
+
 
         if (!p)
             throw std::bad_alloc();
@@ -61,27 +75,24 @@ struct custom_allocator {
     }
 
     void deallocate(T *p, std::size_t n) {
-#ifdef DEBUG
-        std::cout << "deallocate: [n  = " << n << "] " << std::endl;
-#endif
-        if(!members_count) std::free(pool);
+        --members_count;
+
+
+
+        if (!members_count) {
+            if(pool_list) delete pool_list;
+                    };
 
     }
 
     template<typename U, typename ...Args>
     void construct(U *p, Args &&...args) {
-#ifdef DEBUG
-        std::cout << "construct" << std::endl;
-#endif
+
         new(p) U(std::forward<Args>(args)...);
     }
 
     void destroy(T *p) {
-        --members_count;
-#ifdef DEBUG
-        std::cout << "destroy" << std::endl;
-        std::cout<<"members_count ="<<members_count<<std::endl;
-#endif
+
         p->~T();
 
 
