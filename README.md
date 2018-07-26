@@ -1,5 +1,5 @@
-# ***otus-cpp.homework02.ip-filter***
+# ***otus-cpp.homework03.allocator***
 
-* src - dierctory with sources files
-* test - directory with unit tests
-* docs - Doxyfile
+* src - dierctory with sources files :heavy_check_mark::star2:
+* test - directory with unit tests :heavy_check_mark::star2:
+* docs - Doxyfile :heavy_check_mark::star2:
