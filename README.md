@@ -1,5 +1,5 @@
 # ***otus-cpp.homework03.allocator***
 
-* src - dierctory with sources files :heavy_check_mark::star2:
-* test - directory with unit tests :heavy_check_mark::star2:
-* docs - Doxyfile :heavy_check_mark::star2:
+* src - dierctory with sources files :heavy_check_mark:
+* test - directory with unit tests :heavy_check_mark:
+* docs - Doxyfile :heavy_check_mark:

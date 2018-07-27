@@ -23,7 +23,7 @@ struct custom_allocator {
     size_t pool_size{0};
     size_t members_count{0};
     size_t add_members_count{0};
-    PoolList<T>* pool_list{nullptr};
+    PoolList<T> *pool_list{nullptr};
 
     template<typename U>
     struct rebind {
@@ -41,32 +41,21 @@ struct custom_allocator {
 
     T *allocate(std::size_t n) {
 
-if(n>1) std::invalid_argument("Sorry, but we could allocate only one element for time");
+        if (n > 1) std::invalid_argument("Sorry, but we could allocate only one element for time");
 
 
+        ++members_count;
 
 
-
-
-
-            ++members_count;
-
-
-
-
-        if(!pool_list){ pool_list = new PoolList<T>(init_pool_size);
-
+        if (!pool_list) {
+            pool_list = new PoolList<T>(init_pool_size);
         }
 
         pool_list->add_allocate_node_pointer_to_list(add_members_count);
 
 
-
-
-
-
         auto p = reinterpret_cast<T *>(pool_list->get_element_pointer(add_members_count));
-                ++add_members_count;
+        ++add_members_count;
 
 
         if (!p)
@@ -78,10 +67,11 @@ if(n>1) std::invalid_argument("Sorry, but we could allocate only one element for
         --members_count;
 
 
-
         if (!members_count) {
-            if(pool_list) delete pool_list;
-                    };
+            if (pool_list) {delete pool_list;pool_list = nullptr;}
+            add_members_count = 0;
+
+        };
 
     }
 
