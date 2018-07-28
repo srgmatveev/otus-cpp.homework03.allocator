@@ -21,19 +21,25 @@ namespace hw03 {
     typedef integral_constant<bool, true> true_type;
     typedef integral_constant<bool, false> false_type;
 
-    template<typename> struct is_integer_base: false_type {};
+    template<typename>
+    struct is_integer_base : false_type {
+    };
 
 
-    template<> struct is_integer_base<int>: true_type {};
+    template<>
+    struct is_integer_base<int> : true_type {
+    };
 
 
-    template<typename T> struct is_integer: is_integer_base<std::remove_cv_t<T>> {};
-
+    template<typename T>
+    struct is_integer : is_integer_base<std::remove_cv_t<T>> {
+    };
 
 
 }
+
 template<typename T>
-constexpr auto factorial(T n) -> decltype(n) {
+auto factorial(T n) -> decltype(n) {
 
 
     static_assert(hw03::is_integer<T>::value, "Integral required.");

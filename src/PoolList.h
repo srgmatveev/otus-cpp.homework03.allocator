@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <new>
+#include <cmath>
 
 struct pool_node {
     size_t pool_size{0};
@@ -65,11 +66,23 @@ public:
 
         if (get_size() < index + 1) return nullptr;
 
+
+
+
+
+        if(get_size()==1) {
+
+            return head->pool;
+        }
+
+
         auto *tmp = head;
 
+        for ( auto i = 0; i < index; ++i ) {
 
-        for ( auto i = 0; i < index; ++i ) tmp = head->next;
-        if(!tmp) return nullptr;
+            tmp = tmp->next;}
+
+
         return tmp->pool;
 
     }
@@ -78,9 +91,10 @@ public:
     U* get_element_pointer(const size_t& index){
 
         U* p = nullptr;
-        size_t pool_node_number = index / size_of_pool_node;
+        size_t pool_node_number = std::floor(index / size_of_pool_node);
 
         size_t offset_from_node = index - pool_node_number * size_of_pool_node;
+
 
         p = reinterpret_cast<U *> (get_node_adrres_by_node_number(pool_node_number)) + offset_from_node;
 
@@ -124,11 +138,14 @@ public:
         if (!head) {
 
             head = tmp;
+            tmp->next= nullptr;
         } else {
 
             get_last_node()->next = tmp;
 
         }
+
+
 
     }
 

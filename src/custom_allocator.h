@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 
-template<typename T, size_t init_pool_size>
+template<typename T, size_t init_pool_size = 1>
 struct custom_allocator {
 
     //type definitions
@@ -19,8 +19,7 @@ struct custom_allocator {
     using difference_type= ptrdiff_t;
     using size_type= size_t;
 
-    void *pool{nullptr};
-    size_t pool_size{0};
+
     size_t members_count{0};
     size_t add_members_count{0};
     PoolList<T> *pool_list{nullptr};
@@ -37,18 +36,22 @@ struct custom_allocator {
     template<typename U>
     custom_allocator(const custom_allocator<U, init_pool_size> &) {
 
+
     }
 
     T *allocate(std::size_t n) {
 
-        if (n > 1) std::invalid_argument("Sorry, but we could allocate only one element for time");
+        if (n != 1) std::invalid_argument("Sorry, but we could allocate only one element for time");
 
 
         ++members_count;
 
 
         if (!pool_list) {
-            pool_list = new PoolList<T>(init_pool_size);
+
+            if (init_pool_size == 0) { pool_list = new PoolList<T>(1); }
+            else { pool_list = new PoolList<T>(init_pool_size); }
+
         }
 
         pool_list->add_allocate_node_pointer_to_list(add_members_count);
@@ -68,7 +71,11 @@ struct custom_allocator {
 
 
         if (!members_count) {
-            if (pool_list) {delete pool_list;pool_list = nullptr;}
+            if (pool_list) {
+                delete pool_list;
+                pool_list = nullptr;
+
+            }
             add_members_count = 0;
 
         };

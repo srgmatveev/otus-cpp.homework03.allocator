@@ -86,3 +86,25 @@ TEST(Forward_List_Test, Forward_List_Test_Append_Delete_Test) {
 }
 
 
+TEST(Forward_List_Test, Forward_List_Test_Zero_Allocator_size) {
+    hw03::my_forward_list<int, custom_allocator<int,0>> fwd_list = {1,2,3,5,6,7,8};
+    int count = 0;
+
+    for ( auto &i : fwd_list ) { ++count; }
+
+    ASSERT_EQ(count, 7);
+
+
+}
+
+TEST(Forward_List_Test, Forward_List_Test_Default_Allocator_size) {
+    hw03::my_forward_list<int, custom_allocator<int>> fwd_list = {1,2,3,5,6,7,8};
+    fwd_list.push_back(15);
+    int count = 0;
+
+    for ( auto &i : fwd_list ) { ++count; }
+
+    ASSERT_EQ(count, 8);
+
+
+}
