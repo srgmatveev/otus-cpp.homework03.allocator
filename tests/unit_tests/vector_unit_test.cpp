@@ -12,9 +12,7 @@ TEST(Vector_Test, Vector_Test_Append_Delete_Test) {
     std::vector<int, custom_allocator<int, 2>> v = {1, 2, 3};
     //std::vector<int> v = {1, 2, 3};
     v.reserve(5);
-
     ASSERT_EQ(v.size(), 3);
-
     v.pop_back();
     ASSERT_EQ(v.size(), 2);
     v.push_back(1);
