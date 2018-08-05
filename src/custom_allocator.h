@@ -39,7 +39,7 @@ struct custom_allocator {
 
         if (n == 0) return nullptr;
         T *p = nullptr;
-        if (n == 1 and (is_vector == false or multi_vals == false)) {
+        if (n == 1 and (is_vector == false and multi_vals == false)) {
             ++members_count;
             size_t p_size = 0;
             if (init_pool_size == 0) { p_size = 1; }
@@ -54,7 +54,6 @@ struct custom_allocator {
             p = reinterpret_cast<T *>(std::malloc(n * sizeof(T)));
 
         } else {
-
             for ( auto i = 0; i < n; ++i ) ++members_count;
             if (!pool_list) pool_list = new PoolList<T>();
             p = reinterpret_cast<T *>(pool_list->add_allocate_node_pointer_to_list_multi(add_members_count, n));
@@ -72,7 +71,7 @@ struct custom_allocator {
             else std::free(p);
              }
          else {
-            for ( int i = n; i > 0; --i ) --members_count;
+            members_count -= n;
             if (members_count < 0) members_count = 0;
             if (!members_count) {
                 if (pool_list) {
